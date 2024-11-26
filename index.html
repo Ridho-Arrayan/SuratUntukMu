@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en" class="light">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Surat Cinta Digital</title>
+    <meta name="description" content="Surat cinta digital untuk orang tersayang" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Lato:wght@400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-primary: #f5f7fa;
+            --bg-secondary: #e4e9f2;
+            --text-primary: #4a5568;
+            --text-secondary: #718096;
+            --accent: #9f7aea;
+            --accent-hover: #805ad5;
+            --card-bg: #ffffff;
+        }
+
+        .dark {
+            --bg-primary: #1a202c;
+            --bg-secondary: #2d3748;
+            --text-primary: #f7fafc;
+            --text-secondary: #e2e8f0;
+            --accent: #b794f4;
+            --accent-hover: #9f7aea;
+            --card-bg: #2d3748;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .container {
+            max-width: 800px;
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        h1 {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4rem;
+            color: var(--text-primary);
+            margin-bottom: 1.5rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        p {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.8;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 0.5s forwards;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--accent) 0%, var(--accent-hover) 100%);
+            color: white;
+            border: none;
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 1s forwards;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .controls {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 1rem;
+            z-index: 10;
+        }
+
+        .control-btn {
+            background: var(--card-bg);
+            border: none;
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .cursor-trail {
+            position: fixed;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        .letter-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 3rem;
+            border-radius: 1.5rem;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            opacity: 0;
+            transform: scale(0.95);
+            transition: all 0.3s ease;
+            color: var(--text-primary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .letter-content.show {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .typing-text {
+            min-height: 100px;
+            text-align: left;
+            color: var(--text-primary);
+            font-family: 'Dancing Script', cursive;
+            font-size: 1.5rem;
+            line-height: 1.8;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .particle {
+            position: fixed;
+            pointer-events: none;
+            opacity: 0;
+            animation: particleAnimation 1s ease-out forwards;
+        }
+
+        @keyframes particleAnimation {
+            0% { transform: translate(0, 0); opacity: 1; }
+            100% { transform: translate(var(--end-x), var(--end-y)); opacity: 0; }
+        }
+
+        #particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        <button class="control-btn" onclick="toggleTheme()" title="Toggle theme">
+            🌙
+        </button>
+        <button class="control-btn" onclick="toggleMusic()" title="Toggle music">
+            🎵
+        </button>
+    </div>
+    <div id="particles"></div>
+
+    <div class="container">
+        <div id="welcome" class="step active">
+            <h1>Halo, Sayangku</h1>
+            <p>Selamat datang di ruang ini, tempat di mana aku menuliskan isi hatiku untukmu.</p>
+            <button class="btn" onclick="showLetter()">Buka Surat Cinta</button>
+        </div>
+        <div id="letter" class="step" style="display: none;">
+            <div class="letter-content">
+                <div class="typing-text"></div>
+                <button class="btn" onclick="showEnding()" style="display: none;">Lanjutkan</button>
+            </div>
+        </div>
+        <div id="ending" class="step" style="display: none;">
+            <h2 style="font-family: 'Dancing Script', cursive; font-size: 3rem; margin-bottom: 2rem; color: var(--text-primary);">Surat ini hanyalah sebagian kecil dari isi hatiku.</h2>
+            <p>Aku harap kamu merasakannya dengan sepenuh hati, sama seperti aku menuliskannya.</p>
+            <button class="btn" onclick="restart()">Baca Ulang</button>
+        </div>
+    </div>
+
+    <script>
+        const audio = new Audio('https://raw.githubusercontent.com/Ridho-Arrayan/hopetoseeyouagain/main/antent_-_hope_to_see_you_again_%5B_YouConvert.net_%5D.mp3');
+audio.loop = true;
+audio.volume = 1.0;
+let isMusicPlaying = false;
+
+function toggleMusic() {
+    if (isMusicPlaying) {
+        audio.pause();
+    } else {
+        audio.play();
+    }
+    isMusicPlaying = !isMusicPlaying;
+        }
+
+
+            function toggleMusic() {
+            if (isMusicPlaying) {
+                audio.pause();
+            } else {
+                audio.play().catch(error => {
+                    console.log("Audio playback failed:", error);
+                });
+            }
+            isMusicPlaying = !isMusicPlaying;
+            document.querySelector('.controls button:last-child').textContent = isMusicPlaying ? '🔊' : '🎵';
+        }
+
+        function toggleTheme() {
+            document.documentElement.classList.toggle('dark');
+            const themeBtn = document.querySelector('.controls button:first-child');
+            themeBtn.textContent = document.documentElement.classList.contains('dark') ? '☀️' : '🌙';
+        }
+
+        // Cursor trail effect
+        function createParticle(x, y) {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerHTML = ['❤️', '✨', '🌸'][Math.floor(Math.random() * 3)];
+            particle.style.left = x + 'px';
+            particle.style.top = y + 'px';
+            particle.style.setProperty('--end-x', (Math.random() - 0.5) * 100 + 'px');
+            particle.style.setProperty('--end-y', (Math.random() * 100 + 50) + 'px');
+            document.body.appendChild(particle);
+            setTimeout(() => particle.remove(), 1000);
+        }
+
+        let lastX = 0;
+        let lastY = 0;
+        document.addEventListener('mousemove', (e) => {
+            const distance = Math.hypot(e.clientX - lastX, e.clientY - lastY);
+            if (distance > 50) {
+                createParticle(e.clientX, e.clientY);
+                lastX = e.clientX;
+                lastY = e.clientY;
+            }
+        });
+
+        // Background particles
+        function createBackgroundParticle() {
+            const particle = document.createElement('div');
+            particle.className = 'particle';
+            particle.innerHTML = '✨';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = -20 + 'px';
+            particle.style.setProperty('--end-x', (Math.random() - 0.5) * 200 + 'px');
+            particle.style.setProperty('--end-y', window.innerHeight + 'px');
+            document.getElementById('particles').appendChild(particle);
+            setTimeout(() => particle.remove(), 3000);
+        }
+
+        setInterval(createBackgroundParticle, 500);
+
+        const letter = "Aku ingin kamu tahu bahwa setiap detik bersamamu adalah hadiah yang tak ternilai bagiku. Kamu adalah alasan aku tersenyum, alasan aku bermimpi, dan alasan aku percaya akan cinta sejati. Setiap detak jantungku bernyanyi untukmu, dan setiap nafasku adalah doa untuk kebahagiaanmu.";
+        let letterIndex = 0;
+
+        function showLetter() {
+            document.getElementById('welcome').style.display = 'none';
+            document.getElementById('letter').style.display = 'block';
+            setTimeout(() => {
+                document.querySelector('.letter-content').classList.add('show');
+                typeLetter();
+            }, 100);
+        }
+
+        function typeLetter() {
+            const typingText = document.querySelector('.typing-text');
+            if (letterIndex < letter.length) {
+                typingText.textContent += letter[letterIndex];
+                letterIndex++;
+                setTimeout(typeLetter, 50);
+            } else {
+                document.querySelector('#letter .btn').style.display = 'block';
+            }
+        }
+
+        function showEnding() {
+            document.getElementById('letter').style.display = 'none';
+            document.getElementById('ending').style.display = 'block';
+        }
+
+        function restart() {
+            letterIndex = 0;
+            document.querySelector('.typing-text').textContent = '';
+            document.getElementById('ending').style.display = 'none';
+            document.getElementById('welcome').style.display = 'block';
+            document.querySelector('.letter-content').classList.remove('show');
+            document.querySelector('#letter .btn').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
